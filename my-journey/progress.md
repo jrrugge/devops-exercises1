@@ -274,12 +274,12 @@ At times the standy may be used for reads to improve user experience.
 Submission - Smart Lead Capstone
 Copy this file into the root of your solution repository and fill it in. Keep it honest and concise - the reviewer reads this first.
 
-Name: skool.com/@john-rugge-4911
+
 Solution repository: repo: https://github.com/jrrugge/devops-exercises1
-                      Smart Lead Capstone: https://github.com/jrrugge/devops-exercises1/tree/main/06-docker/09-capstone-smart-lead
+Smart Lead Capstone: https://github.com/jrrugge/devops-exercises1/tree/main/06-docker/09-capstone-smart-lead
+
 Date: : 30/10/2026
 How to run it
-The reviewer will run exactly what you put here, on a machine with only Docker.
 
 # clone
 git clone https://github.com/jrrugge/devops-exercises1.git
@@ -337,7 +337,6 @@ Persistence - where the database data lives and how you confirmed it survives a 
 
 The database data physically lives inside the container at /var/lib/postgresql/data, which is mapped out to an isolated, docker-managed 'named disk volume called postgres_data on the host 'my local machine'. [postgres_data:/var/lib/postgresql/data] Confirmed durability by writing a message using curl, verifying it created a lead, and then executing a strict docker compose down to completely delete the running container infrastructure from memory. After running docker compose up -d to rebuild the stack, a final curl http://localhost:8080/api/v1/leads request returned the identical records, proving the data survives independent container reboots. See below
 
-
 Reflection
 Answer the questions from the capstone README:
 
@@ -347,6 +346,8 @@ Where does the database data live, and how did you prove it survives a restart? 
 How would you switch from the AI stub to a real HuggingFace key without changing the image or committing a secret? see 7 above.
 What did you do to keep the final image small and safe, and what would you improve with more time? With more time i would set up an Nginx reverse proxy container layer to safely handle upstream SSL/TLS certificate termination.
 
+
+Next steps - Deploy the app into AWS, make sure it runs first and thereafter deploy it in its aws native form with a seperate sqs service and seperate db in their own subnets etc. design. 
 
 
 ### Notes & takeaways
