@@ -317,11 +317,13 @@ curl -X POST localhost:8080/api/v1/messages \
   -H 'Content-Type: application/json' \
   -d '{"content":"How much does the pro plan cost?"}'
 
-# then a lead should appear
+# then a qualified lead should appear
 curl localhost:8080/api/v1/leads
 <img width="1175" height="197" alt="image" src="https://github.com/user-attachments/assets/f9047fd5-e546-42d4-ba7a-e5e016dd882d" />
+
 Design decisions (the important part)
-Explain the choices you made and why. A few sentences each.
+
+Explain the choices you made and why.
 
 Building the app image - what base image(s), single or multi-stage, and why: The pom.xml file dictates our base image choices because it lists the strict technical requirements the app needs to compile and run. Inside the pom.xml, the <java.version>21</java.version> tag explicitly tells us the app is coded in Java 21. Because of this rule, we are forced to use Docker images that natively support Java 21, leading directly to our choices of maven:3.9.6-eclipse-temurin-21-jammy for compiling the code and eclipse-temurin:21-jre-jammy for running it. We separated the compilation from the execution i.e multi-stage build. By discarding the heavy Maven tools and source code after building the jar file, and copying only the final app jar into a lightweight JRE runner, we keep the final image incredibly lean, small, and secure for production. By reading these rules directly from the project's blueprint i.e pom file, we ensure our containers match the exact environment the application expects.
 
@@ -347,7 +349,7 @@ How would you switch from the AI stub to a real HuggingFace key without changing
 What did you do to keep the final image small and safe, and what would you improve with more time? With more time i would set up an Nginx reverse proxy container layer to safely handle upstream SSL/TLS certificate termination.
 
 
-Next steps - Deploy the app into AWS, make sure it runs first and thereafter deploy it in its aws native form with a seperate sqs service and seperate db in their own subnets etc. design. 
+Next steps - Deploy the app into AWS, make sure it runs first as is in AWS and thereafter design architecture and deploy it in its aws native form with real aws sqs service and seperate postgres db in their own subnets. Design for HA, scalability and security. 
 
 
 ### Notes & takeaways
