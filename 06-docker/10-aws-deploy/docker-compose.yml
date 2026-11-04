@@ -1,0 +1,69 @@
+# AWS (EC2) stack. The only file the server needs. Run with:   docker compose up -d
+#
+# No .env file: every app setting lives in ONE Secrets Manager secret (smartlead/db).
+# secrets-init writes each key of that secret as a file in a volume, and the app loads the
+# folder as a Spring "config tree" (file name = property name, file content = value).
+# Only the values needed to reach Secrets Manager and ECR are written here, and none are secret.
+# AWS credentials come from the EC2 IAM role. Do NOT set AWS access keys.
+
+services:
+  secrets-init:
+    image: alpine:3.20
+    environment:
+      - AWS_DEFAULT_REGION=us-east-1
+      - SECRET_ID=smartlead/db
+    volumes:
+      - app_secrets:/secrets
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        set -eu
+        apk add --no-cache aws-cli jq >/dev/null
+        S=$$(aws secretsmanager get-secret-value --secret-id "$$SECRET_ID" --query SecretString --output text)
+        echo "$$S" | jq -e 'type=="object"' >/dev/null
+        echo "$$S" | jq -r 'keys[]' | while IFS= read -r k; do
+          echo "$$S" | jq -j --arg k "$$k" '.[$$k]' > "/secrets/$$k"
+        done
+        chmod 644 /secrets/*
+        echo "wrote keys: $$(ls /secrets | tr '\n' ' ')"
+    restart: "no"
+
+  app:
+    image: ${ECR_IMAGE:-529088292338.dkr.ecr.us-east-1.amazonaws.com/smartlead-app:1.0}
+    pull_policy: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      secrets-init:
+        condition: service_completed_successfully
+    volumes:
+      - app_secrets:/secrets:ro
+    environment:
+      # everything secret or environment-specific arrives from /secrets
+      - SPRING_CONFIG_IMPORT=configtree:/secrets/
+      # application.properties hardcodes LocalStack test keys and a localhost SQS endpoint:
+      # blank the keys so the EC2 role is used, and point the endpoint at real SQS
+      - SPRING_CLOUD_AWS_REGION_STATIC=us-east-1
+      - SPRING_CLOUD_AWS_CREDENTIALS_ACCESS_KEY=
+      - SPRING_CLOUD_AWS_CREDENTIALS_SECRET_KEY=
+      - SPRING_CLOUD_AWS_SQS_ENDPOINT=https://sqs.us-east-1.amazonaws.com
+      - MANAGEMENT_OTLP_METRICS_EXPORT_ENABLED=false
+      - MANAGEMENT_OTLP_TRACING_EXPORT_ENABLED=false
+      - OTEL_TRACES_EXPORTER=none
+      - OTEL_METRICS_EXPORTER=none
+    healthcheck:
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/8080 && echo -e 'GET /actuator/health HTTP/1.1\r\nHost: localhost\r\n\r\n' >&3 && cat <&3 | grep -q '\"status\":\"UP\"'"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+    # Container logs go to CloudWatch (log group must exist). `docker compose logs app` will be empty.
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: us-east-1
+        awslogs-group: /smartlead/app
+    restart: unless-stopped
+
+volumes:
+  app_secrets:
