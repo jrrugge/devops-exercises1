@@ -1,35 +1,34 @@
 variable "region" {
-  type    = string
-  default = "us-east-1"
+  type        = string
+  description = "AWS region to deploy into"
 }
 
 variable "project" {
-  type    = string
-  default = "smartlead"
+  type        = string
+  description = "Name prefix for every resource"
 }
 
 variable "vpc_cidr" {
-  type    = string
-  default = "10.0.0.0/16"
-}
+  type        = string
+  description = "CIDR block for the VPC"
 
-variable "subnets" {
-  type = map(object({
-    cidr = string
-    az   = string
-    tier = string # public | app | db
-  }))
-  default = {
-    public-a = { cidr = "10.0.0.0/24", az = "us-east-1a", tier = "public" }
-    public-b = { cidr = "10.0.1.0/24", az = "us-east-1b", tier = "public" }
-    app-a    = { cidr = "10.0.10.0/24", az = "us-east-1a", tier = "app" }
-    app-b    = { cidr = "10.0.11.0/24", az = "us-east-1b", tier = "app" }
-    db-a     = { cidr = "10.0.20.0/24", az = "us-east-1a", tier = "db" }
-    db-b     = { cidr = "10.0.21.0/24", az = "us-east-1b", tier = "db" }
+  validation {
+    condition     = can(cidrnetmask(var.vpc_cidr))
+    error_message = "vpc_cidr must be a valid CIDR block, for example 10.0.0.0/16."
   }
 }
 
-variable "single_nat_gateway" {
-  type    = bool
-  default = true
+variable "db_instance_class" {
+  type        = string
+  description = "RDS instance class"
+}
+
+variable "db_multi_az" {
+  type        = bool
+  description = "Run a standby database in the second AZ (not free tier)"
+}
+
+variable "db_allocated_storage" {
+  type        = number
+  description = "RDS storage in GiB"
 }

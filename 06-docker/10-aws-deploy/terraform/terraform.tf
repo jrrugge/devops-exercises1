@@ -4,9 +4,14 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.92"
     }
-  }
-  required_version = ">= 1.10"
 
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.6"
+    }
+  }
+
+  required_version = ">= 1.10"
 
   backend "s3" {
     bucket       = "smartlead-tfstate-529088292338"
