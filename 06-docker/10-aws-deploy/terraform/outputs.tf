@@ -25,3 +25,7 @@ output "queue_url" {
 output "db_secret_arn" {
   value = aws_secretsmanager_secret.db.arn
 }
+
+output "ecr_repository_url" {
+  value = aws_ecr_repository.app.repository_url
+}

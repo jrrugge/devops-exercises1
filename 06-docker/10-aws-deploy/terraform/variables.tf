@@ -32,3 +32,13 @@ variable "db_allocated_storage" {
   type        = number
   description = "RDS storage in GiB"
 }
+
+variable "app_instance_type" {
+  type        = string
+  description = "EC2 instance type for the app"
+}
+
+variable "app_image_tag" {
+  type        = string
+  description = "Tag of the smartlead-app image in ECR to run"
+}
