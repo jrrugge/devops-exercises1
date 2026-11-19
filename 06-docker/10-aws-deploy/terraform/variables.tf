@@ -42,3 +42,11 @@ variable "app_image_tag" {
   type        = string
   description = "Tag of the smartlead-app image in ECR to run"
 }
+
+variable "zone_name" {
+  type = string
+}
+
+variable "app_domain" {
+  type = string
+}

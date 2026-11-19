@@ -1,6 +1,6 @@
 resource "aws_ecr_repository" "app" {
   name         = "${var.project}-app"
-  force_delete = true # lab: lets destroy remove the repo even if it holds images
+  force_delete = false
 
   image_scanning_configuration {
     scan_on_push = true

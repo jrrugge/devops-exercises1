@@ -29,7 +29,6 @@ locals {
 }
 
 
-#no hardcoding
 data "aws_ssm_parameter" "al2023" {
   name = "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64"
 }
@@ -65,14 +64,16 @@ resource "aws_launch_template" "app" {
 
 resource "aws_autoscaling_group" "app" {
   name                = "${var.project}-asg"
-  min_size            = 2
-  desired_capacity    = 2
+  min_size            = 1
+  desired_capacity    = 1
   max_size            = 2
   vpc_zone_identifier = [aws_subnet.app_a.id, aws_subnet.app_b.id]
 
-  # Switch to "ELB" in Layer 4, once the load balancer's health check exists
-  health_check_type         = "EC2"
+
+  target_group_arns         = [aws_lb_target_group.app.arn]
+  health_check_type         = "ELB"
   health_check_grace_period = 300
+
 
   launch_template {
     id      = aws_launch_template.app.id
@@ -87,11 +88,11 @@ resource "aws_autoscaling_group" "app" {
     }
   }
 
-
   depends_on = [
     aws_route_table_association.app_a,
     aws_route_table_association.app_b,
     aws_secretsmanager_secret_version.db,
+    aws_iam_instance_profile.app,
   ]
 
   tag {
