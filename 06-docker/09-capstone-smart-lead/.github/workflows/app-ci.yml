@@ -1,0 +1,42 @@
+name: CI - Build
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - src/**
+  pull_request:
+    branches:
+      - master
+    paths:
+      - src/**
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up java
+        uses: actions/setup-java@v5
+        with:
+          distribution: "temurin"
+          java-version: "21"
+          cache: "maven"
+
+      - name: Build and run Unit/Integration Tests with Maven
+        run: mvn -ntp -B verify
+
+      - name: Publish test report
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: Maven Tests
+          path: target/surefire-reports/*.xml
+          reporter: java-junit
