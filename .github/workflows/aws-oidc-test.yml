@@ -1,0 +1,23 @@
+name: aws-oidc-test
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/aws-oidc-test.yml"
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  whoami:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log in to AWS with OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::529088292338:role/smartlead-github-deploy
+          aws-region: us-east-1
+
+      - name: Show who we are
+        run: aws sts get-caller-identity
