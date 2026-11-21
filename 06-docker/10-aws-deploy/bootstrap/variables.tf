@@ -6,6 +6,6 @@ variable "project" {
   type = string
 }
 
-variable "github_repo" {
+variable "github_repo_claim" {
   type = string
 }
