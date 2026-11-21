@@ -1,32 +1,28 @@
-# --- Stage 1: Build the application ---
+#Build phase: reason precomplie the app to keep the final image lean  
 FROM maven:3.9.6-eclipse-temurin-21-jammy AS builder
-WORKDIR /app
+WORKDIR /build
 
-# Copy the pom.xml and dependency wrapper configuration to cache layers
 COPY pom.xml .
 COPY .mvn .mvn
 COPY mvnw .
 
-# Download dependencies (this layer remains cached if pom.xml doesn't change)
+#dependencies download
 RUN ./mvnw dependency:go-offline -B
 
-# Copy the source code and build the package
 COPY src ./src
 RUN ./mvnw clean package -DskipTests
 
-# --- Stage 2: Lean, secure runtime ---
+#Run time phase: JRE lightweight runner 
 FROM eclipse-temurin:21-jre-jammy
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y wget
 
-# Create a non-root system user and group for security
 RUN groupadd -r devops && useradd -r -g devops devops
 
-# Copy the built jar from the builder stage
-COPY --from=builder /app/target/*.jar app.jar
+COPY --from=builder /build/target/*.jar app.jar
 
-# Adjust ownership to the non-root user
+#Adjust ownership to the non-root user
 RUN chown -R devops:devops /app
 USER devops
 
