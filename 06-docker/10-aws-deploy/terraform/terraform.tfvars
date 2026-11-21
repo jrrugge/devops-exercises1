@@ -5,6 +5,6 @@ db_instance_class    = "db.t4g.micro"
 db_multi_az          = false
 db_allocated_storage = 20
 app_instance_type    = "t3.micro"
-app_image_tag        = "1.0"
+app_image_tag        = "bb08fe0"
 zone_name            = "cloudenglabs.dev"
 app_domain           = "smartlead.cloudenglabs.dev"
