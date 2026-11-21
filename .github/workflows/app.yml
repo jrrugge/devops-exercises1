@@ -1,0 +1,49 @@
+name: app
+
+on:
+  pull_request:
+    paths:
+      - "06-docker/09-capstone-smart-lead/**"
+      - ".github/workflows/app.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "06-docker/09-capstone-smart-lead/**"
+      - ".github/workflows/app.yml"
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_REGION: us-east-1
+  IMAGE: 529088292338.dkr.ecr.us-east-1.amazonaws.com/smartlead-app
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Log in to AWS with OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::529088292338:role/smartlead-github-deploy
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Log in to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Work out the image tag
+        run: echo "TAG=${GITHUB_SHA::7}" >> "$GITHUB_ENV"
+
+      - name: Build the image
+        working-directory: 06-docker/09-capstone-smart-lead
+        run: docker build --platform linux/amd64 -t "$IMAGE:$TAG" .
+
+      - name: Push the image
+        if: github.event_name == 'push'
+        run: docker push "$IMAGE:$TAG"
