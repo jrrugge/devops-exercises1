@@ -1,0 +1,69 @@
+name: terraform
+
+on:
+  # Every pull request that touches the Terraform code gets a plan.
+  pull_request:
+    paths:
+      - "06-docker/10-aws-deploy/terraform/**"
+      - ".github/workflows/terraform.yml"
+
+  # The manual button: plan only, or plan and apply.
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "What to run"
+        type: choice
+        options:
+          - plan
+          - apply
+        default: plan
+
+# OIDC login.
+permissions:
+  id-token: write
+  contents: read
+
+# Never run two Terraform jobs at once (they would fight over the state lock).
+concurrency:
+  group: terraform
+  cancel-in-progress: false
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: 06-docker/10-aws-deploy/terraform
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Log in to AWS with OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::529088292338:role/smartlead-github-deploy
+          aws-region: us-east-1
+
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.10.5"
+
+      - name: Check formatting
+        run: terraform fmt -check -recursive -diff
+
+      - name: Init
+        run: terraform init -input=false
+
+      - name: Validate
+        run: terraform validate
+
+      - name: Plan
+        run: terraform plan -input=false -lock-timeout=60s -out=tfplan
+
+      # Only when you press the button, chose "apply", and ran it from main.
+      - name: Apply
+        if: github.event_name == 'workflow_dispatch' && inputs.action == 'apply' && github.ref == 'refs/heads/main'
+        run: terraform apply -input=false tfplan         
