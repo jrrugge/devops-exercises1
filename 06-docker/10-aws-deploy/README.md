@@ -78,6 +78,6 @@ All eight are in the [deep dive](docs/deep-dive.md#challenges-and-how-i-solved-t
 
 ## Evidence and running it
 
-Screenshots of the live run: [HTTPS health check](docs/images/https-health.png), [pipeline apply](docs/images/pipeline-apply.png), [pull request checks](docs/images/pr-checks.png), [running image](docs/images/running-image.png). Commands to build and tear it down are in the [deep dive](docs/deep-dive.md#how-to-run-it).
+Screenshots of the live run: [HTTPS health check](docs/https-health.png), [pipeline apply](docs/pipeline-apply.png), [pull request checks](docs/pr-checks.png), [running image](docs/running-image.png). Commands to build and tear it down are in the [deep dive](docs/deep-dive.md#how-to-run-it).
 
 *Part of my [DevOps learning journey](../../my-journey/progress.md). I built this step by step. I am working towards a cloud or platform engineering & architect career.
