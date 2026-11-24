@@ -4,7 +4,7 @@ Back to the [summary](README.md).
 
 ## The business problem
 
-The Smart Lead API turns customer messages into sales leads, but it only ran on a developer's machine. The business needed it reachable over HTTPS around the clock, secure (private data, no credentials in code), rebuildable from code, safe to change through reviewed pipelines, and cheap to tear down.
+The Smart Lead API turns customer messages into sales leads, but it only ran on a developer's machine. The business needed it reachable over HTTPS around the clock, secure (private data, no credentials in code), rebuildable from code, safe to change through reviewed pipelines, and cheap to tear down. Build from requirments and what will solve the business problem effectively.
 
 ## What I built, step by step
 
@@ -21,7 +21,7 @@ Access is by Session Manager: no SSH, no key pair.
 
 ## How to run and test it
 
-Image build: see my [journey log](../../progress.md#building-the-app-image).
+Image build: see my [journey log](../../progress.md#building-the-app-image). Ref - 07 Capstone Full Project Build
 
 ```bash
 cd 06-docker/09-capstone-smart-lead
