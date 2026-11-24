@@ -49,7 +49,7 @@ A release is a one-line change to the image tag in `terraform.tfvars`, so every 
 - **No secrets in the repo.** The database password is generated and held in Secrets Manager. State is in a private, versioned, encrypted s3 bucket.
 - **Traceable images:** tagged by commit, scanned on push. Fork pull requests cannot get a cloud token.
 
-**Gaps I know about:** the lab role has `AdministratorAccess`, `main` has no branch protection yet, and third-party actions are pinned to version tags, not hashes. The fix is split plan and apply roles, required reviews, code owners and an approval gate. See the [full security table](docs/deep-dive.md#pipeline-security-what-i-did-and-what-i-know-is-missing).
+**Gaps I know about:** the lab role has `AdministratorAccess`, `main` has no branch protection yet, and third-party actions are pinned to version tags, not hashes. The fix is split plan and apply roles, required reviews, code owners and an approval gate. See the [full security table](docs/deep-dive.md#what-i-would-do-next-for-production-grade-readiness).
 
 ## Trade-offs
 
@@ -68,15 +68,15 @@ A release is a one-line change to the image tag in `terraform.tfvars`, so every 
 - **New instances had no app:** `terraform destroy` had deleted the image registry. It now survives teardowns.
 - **CI would have failed on `mvnw`:** Windows does not track the execute bit.
 
-All eight are in the [deep dive](docs/deep-dive.md#challenges-and-how-i-solved-them).
+The full list is in the [deep dive](docs/deep-dive.md#challenges-and-how-i-solved-them).
 
 ## What I would do next
 
 1. **Move from EC2 to ECS on Fargate.** Serverless containers with nothing to patch, scaling tasks automatically with demand and replacing failures. The database, queue, secrets, network and WAF carry over unchanged.
-2. **Dev, staging and prod workflow.** Build the image once and promote the same image through each environment, with separate accounts, per-environment variables and state, a GitHub Environment per stage, and an approval before prod. [The plan](docs/deep-dive.md#environments-and-promotion-the-gap-and-the-plan).
+2. **Dev, staging and prod workflow.** Build the image once and promote the same image through each environment, with separate accounts, per-environment variables and state, a GitHub Environment per stage, and an approval before prod. [The plan](docs/deep-dive.md#what-i-would-do-next-for-production-grade-readiness).
 3. Tests in CI, blue/green releases, CloudWatch alarms, multi-AZ resilience.
 
 ## Evidence and running it
 Screenshots of the live run: [HTTPS health check](docs/https-health.png), [load balancer targets healthy](docs/alb-target-health.png), [posting and retrieving leads](docs/post%20and%20retrieve%20lead%20messages.png), [pipeline apply](docs/pipeline-apply.png), [pull request checks](docs/pr-check.png) and [plan](docs/pr-check-plan.png), [running image](docs/running%20image.png). Commands to build, test and tear it down are in the [deep dive](docs/deep-dive.md#how-to-run-and-test-it).
 
-*Part of my [DevOps learning journey](../../my-journey/progress.md). I built this step by step. I am working towards a cloud or platform engineering & architect career.
+*Part of my [DevOps learning journey](../../my-journey/progress.md). I built this step by step. I am working towards a cloud or platform engineering & architect career.*
