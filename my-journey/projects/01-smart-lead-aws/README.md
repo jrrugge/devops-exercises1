@@ -29,7 +29,7 @@ A developer handed me the source code for a Spring Boot API and asked me to make
 | --- | --- |
 | **Done** | Linux, Vim, shell scripting, Git and GitHub, Docker, an end-to-end AWS deployment |
 | **Next** | HashiCorp Terraform Associate (004), then Kubernetes (CKA/CKAD) |
-| **Project next** | ECS on Fargate and a dev, staging and prod promotion workflow |
+| **Project next** |  |
 
 ## Where to look
 
