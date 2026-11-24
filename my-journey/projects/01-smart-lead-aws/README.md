@@ -4,7 +4,7 @@ Hi, I'm [@jrrugge](https://github.com/jrrugge). I'm building towards a **cloud /
 
 ## Featured project: Smart Lead on AWS
 
-A developer handed me the source code for a Spring Boot API and asked me to make it available online, hosted in AWS. I analysed the application, packaged it into a container image, designed the AWS platform and built it with Terraform and GitHub Actions.
+A developer handed me the source code for a Spring Boot API and asked me to make it available online, hosted in AWS. I analysed the application, packaged it into a docker container image, designed the AWS platform and built it with Terraform and GitHub Actions.
 
 - Private three-tier network, load balancer, managed PostgreSQL and SQS
 - HTTPS on my own domain, with a web application firewall
