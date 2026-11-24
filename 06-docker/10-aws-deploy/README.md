@@ -9,7 +9,7 @@ non-relevant sales leads do not reach the queue.
 **The brief:** a developer handed me the source code for a Spring Boot API and asked me to package it as a container image and make it accessible online reliably and hosted on AWS. The solution helps the sales team
 get to qualified leads and convert those leads into revenue faster.
 
-**What I did as the cloud/platform engineer:**
+**What I did as the cloud/platform architect & engineer:**
 
 - **Analysed the application** from its `pom.xml` and source: Java 21, PostgreSQL and SQS dependencies, port 8080, a health endpoint, configuration through environment variables.
 - **Packaged it from scratch** into a container image with a [multi-stage Dockerfile](../09-capstone-smart-lead/Dockerfile).
