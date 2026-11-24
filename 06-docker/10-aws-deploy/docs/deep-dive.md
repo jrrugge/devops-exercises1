@@ -21,7 +21,7 @@ Access is by Session Manager: no SSH, no key pair.
 
 ## How to run and test it
 
-Image build: see my [journey log](../../../my-journey/progress.md#building-the-app-image).
+Image build: see my [journey log](../../../my-journey/progress.md#building-the-app-image). under Ref: 07 - Capstone: Full-Stack App on Docker
 
 ```bash
 cd 06-docker/09-capstone-smart-lead
