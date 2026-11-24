@@ -12,7 +12,7 @@ get to qualified leads and convert those leads into revenue faster.
 **What I did as the cloud/platform architect & engineer:**
 
 - **Analysed the application** from its `pom.xml` and source: Java 21, PostgreSQL and SQS dependencies, port 8080, a health endpoint, configuration through environment variables.
-- **Packaged it from scratch** into a container image with a [multi-stage Dockerfile](../09-capstone-smart-lead/Dockerfile).
+- **Packaged it from scratch** into a docker container image with a [multi-stage Dockerfile](../09-capstone-smart-lead/Dockerfile).
 - **Designed the AWS platform** the application needs, and built manually in AWS at first and through Infrastructure as code using Terraform once proven.
 - **Automated delivery** with GitHub Actions, with no AWS keys stored anywhere using Open Identity Connect.
 
