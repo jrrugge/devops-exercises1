@@ -4,7 +4,7 @@ Back to the [summary](README.md).
 
 ## The business problem
 
-The Smart Lead API turns customer messages into sales leads, but it only ran on a developer's machine. The business needed it reachable over HTTPS around the clock, secure (private data, no credentials in code), rebuildable from code, safe to change through reviewed pipelines, and cheap to tear down. Build from requirments and what will solve the business problem effectively.
+The Smart Lead API turns customer messages into sales leads using the huggingface ai api, but it only ran on a developer's machine. The business needed it reachable over HTTPS around the clock, secure (private data, no credentials in code), rebuildable from code, safe to change through reviewed pipelines, and cheap to tear down. Build from requirments and what will solve the business problem effectively.
 
 ## What I built, step by step
 
