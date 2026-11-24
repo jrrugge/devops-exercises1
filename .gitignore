@@ -4,3 +4,8 @@
 sandbox/
 .DS_Store
 scripts/
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.idea/
