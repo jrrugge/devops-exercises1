@@ -20,7 +20,7 @@ The whole environment (57 resources) builds from one button press in about 10 mi
 
 ## Architecture
 
-[![Architecture diagram](docs/images/architecture.png)](docs/images/architecture.png)
+[![Architecture diagram](docs/smartlead-app-architecture-diagram.draw.io.png)]
 
 A visitor reaches the app over HTTPS through the WAF and a load balancer. The app runs on Auto Scaling instances in private subnets and uses a managed PostgreSQL database and an SQS queue. Secrets come from Secrets Manager, never from the code.
 
