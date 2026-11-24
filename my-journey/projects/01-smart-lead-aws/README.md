@@ -1,6 +1,6 @@
 # DevOps and Cloud Engineering Portfolio
 
-Hi, I'm [@jrrugge](https://github.com/jrrugge). I'm building towards a **cloud / platform engineering** role, learning by building things end to end and documenting how and why.
+Hi, I'm [@jrrugge](https://github.com/jrrugge). I'm building towards a **cloud / platform arcitecture & engineering** role, learning by building things end to end and documenting how and why.
 
 ## Featured project: Smart Lead on AWS
 
