@@ -4,7 +4,7 @@ Hands-on labs and projects on the way to a **cloud / platform engineering** role
 
 - **Started:** _add start date_
 - **GitHub:** [@jrrugge](https://github.com/jrrugge)
-- **Next:** Terraform Associate (004), then Kubernetes (CKA/CKAD)
+- **LinkedIn** [@jrrugge](https://www.linkedin.com/in/jrugge-/)
 
 ## Featured project: Smart Lead on AWS
 
