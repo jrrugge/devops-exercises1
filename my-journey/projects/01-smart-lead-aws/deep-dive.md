@@ -21,27 +21,62 @@ Access is by Session Manager: no SSH, no key pair.
 
 ## How to run and test it
 
-Image build: see my [journey log](../../progress.md#building-the-app-image). Ref - 07 Capstone Full Project Build
+Image build: see my [journey log](../../progress.md#building-the-app-image) (section 09, Capstone: Smart Lead).
+
+The app can be run in two different ways. They test different things.
+
+### 1. Locally (anyone with Docker)
+
+Clone the repo and build the image on your own machine. The app then runs **only on that machine**, at `localhost`. Nobody else can reach it and there is no HTTPS or domain. This proves the image and its dependencies work.
 
 ```bash
-cd 06-docker/09-capstone-smart-lead
-docker compose up -d --build
+git clone https://github.com/jrrugge/devops-exercises1.git
+cd devops-exercises1/06-docker/09-capstone-smart-lead
+cp env.example .env
+docker compose up -d --build        # app + PostgreSQL + local SQS
 
-export APP=http://localhost:8080     # or https://smartlead.cloudenglabs.dev
-curl -i $APP/actuator/health         # expect 200, db UP
+export APP=http://localhost:8080
+curl -i $APP/actuator/health        # expect 200, "status":"UP", db UP
 curl -i -X POST $APP/api/v1/messages -H 'Content-Type: application/json' \
   -d '{"content":"How much does the pro plan cost?"}'   # expect 2xx
-curl $APP/api/v1/leads               # the qualified lead
+curl $APP/api/v1/leads              # the qualified lead
+
+docker compose down
 ```
 
-AWS (needs Terraform 1.10+):
+### 2. In AWS (needs an AWS account and a domain)
+
+To test the real thing (HTTPS on a domain, behind the load balancer and WAF), the image has to be **deployed first**. The environment is destroyed between sessions to control cost, so the live URL only works while it is up.
 
 ```bash
-cd bootstrap && terraform init && terraform apply
+# 1. One-time: state bucket, DNS zone (name servers set at the registrar), OIDC role
+cd 06-docker/10-aws-deploy/bootstrap && terraform init && terraform apply
+
+# 2. Create the image registry first
 cd ../terraform && terraform init
-terraform apply -target=aws_ecr_repository.app   # registry first, push image
-terraform apply
-terraform destroy   # one expected error: registry holds images
+terraform apply -target=aws_ecr_repository.app
+
+# 3. Push the image to it: the pipeline does this on merge, or by hand
+aws ecr get-login-password | docker login --username AWS --password-stdin <account-id>.dkr.ecr.us-east-1.amazonaws.com
+cd ../../09-capstone-smart-lead
+docker build --platform linux/amd64 -t <account-id>.dkr.ecr.us-east-1.amazonaws.com/smartlead-app:<tag> .
+docker push <account-id>.dkr.ecr.us-east-1.amazonaws.com/smartlead-app:<tag>
+
+# 4. Set app_image_tag, zone_name and app_domain in terraform.tfvars, then build everything
+cd ../10-aws-deploy/terraform && terraform apply
+```
+
+If the image is not in the registry before the apply, the instances start with no application. Once it finishes (about 10 minutes), test against the real domain with the same commands:
+
+```bash
+export APP=https://smartlead.cloudenglabs.dev    # or your own app_domain
+curl -i $APP/actuator/health        # expect 200, db UP, over HTTPS
+```
+
+Tear it down when finished (one expected error: the registry still holds images):
+
+```bash
+terraform destroy
 ```
 
 ## CI/CD pipeline
@@ -70,7 +105,7 @@ terraform destroy   # one expected error: registry holds images
 | New instances had no app | `destroy` deleted the registry. It now survives teardowns |
 | CI would fail on `mvnw` | Windows loses the execute bit. Test what your laptop hides |
 
-## What I would do next
+## What I would do next for production grade readiness
 
 1. **ECS on Fargate** instead of EC2 and Compose: serverless containers with no hosts to patch, scaling with demand, failures replaced automatically. Data, network, secrets and WAF carry over.
 2. **Dev, staging and prod:** build once and promote the same image through separate accounts, with per-environment tfvars and state, a GitHub Environment per stage (prod trusting only `environment:prod`), tests gating staging and approval before prod.
