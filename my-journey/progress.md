@@ -2,7 +2,6 @@
 
 Hands-on labs and projects on the way to a **cloud / platform engineering** role. Each section below is a course module I completed, with a screenshot of the finished lab and my own notes. The strongest piece of work is the end-to-end AWS project at the top.
 
-- **Started:** _add start date_
 - **GitHub:** [@jrrugge](https://github.com/jrrugge)
 - **LinkedIn** [@jrrugge](https://www.linkedin.com/in/jrugge-/)
 
