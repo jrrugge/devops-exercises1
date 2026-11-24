@@ -6,7 +6,8 @@ non-relevant sales leads do not reach the queue.
 [![terraform](https://github.com/jrrugge/devops-exercises1/actions/workflows/terraform.yml/badge.svg)](https://github.com/jrrugge/devops-exercises1/actions/workflows/terraform.yml)
 [![app](https://github.com/jrrugge/devops-exercises1/actions/workflows/app.yml/badge.svg)](https://github.com/jrrugge/devops-exercises1/actions/workflows/app.yml)
 
-**The brief:** a developer handed me the source code for a Spring Boot API and asked me to package it as a container image and make it accessible online reliably and hosted on AWS.
+**The brief:** a developer handed me the source code for a Spring Boot API and asked me to package it as a container image and make it accessible online reliably and hosted on AWS. The solution helps the sales team
+get to qualified leads and convert those leads into revenue faster.
 
 **What I did as the cloud/platform engineer:**
 
