@@ -36,8 +36,8 @@ Built in layers, each verified before the next: [network and security groups](te
 
 | Workflow | What it does |
 | --- | --- |
-| [`terraform.yml`](../../.github/workflows/terraform.yml) | Format check, validate and plan on every pull request. Apply runs only when I trigger it manually from `main` branch |
-| [`app.yml`](../../.github/workflows/app.yml) | Builds the image on every pull request; on merge, pushes it to ECR tagged with the commit hash |
+| [`terraform.yml`](../../.github/workflows/terraform.yml) | On a pull request that changes the Terraform code (or the workflow itself): format check, validate and plan. It can also be run manually, and apply runs only when I trigger it from the main branch |
+| [`app.yml`](../../.github/workflows/app.yml) | When the app code (or the workflow itself) changes: builds the image on a pull request, and on merge to main pushes it to ECR tagged with the commit hash. Other changes, such as docs, do not trigger it |
 
 A release is a one-line change to the image tag in `terraform.tfvars`, so every deployed version is a commit I can revert. The Auto Scaling group replaces instances one at a time, and each must pass the load balancer health check first.
 
