@@ -77,7 +77,6 @@ All eight are in the [deep dive](docs/deep-dive.md#challenges-and-how-i-solved-t
 3. Tests in CI, blue/green releases, CloudWatch alarms, multi-AZ resilience.
 
 ## Evidence and running it
-
-Screenshots of the live run: [HTTPS health check](docs/https-health.png), [pipeline apply](docs/pipeline-apply.png), [pull request checks](docs/pr-checks.png), [running image](docs/running-image.png). Commands to build and tear it down are in the [deep dive](docs/deep-dive.md#how-to-run-it).
+Screenshots of the live run: [HTTPS health check](docs/https-health.png), [load balancer targets healthy](docs/alb-target-health.png), [posting and retrieving leads](docs/post%20and%20retrieve%20lead%20messages.png), [pipeline apply](docs/pipeline-apply.png), [pull request checks](docs/pr-check.png) and [plan](docs/pr-check-plan.png), [running image](docs/running%20image.png). Commands to build, test and tear it down are in the [deep dive](docs/deep-dive.md#how-to-run-and-test-it).
 
 *Part of my [DevOps learning journey](../../my-journey/progress.md). I built this step by step. I am working towards a cloud or platform engineering & architect career.
