@@ -70,7 +70,7 @@ terraform destroy   # one expected error: registry holds images
 | New instances had no app | `destroy` deleted the registry. It now survives teardowns |
 | CI would fail on `mvnw` | Windows loses the execute bit. Test what your laptop hides |
 
-## What I would do next
+## What I would do next for production grade readiness
 
 1. **ECS on Fargate** instead of EC2 and Compose: serverless containers with no hosts to patch, scaling with demand, failures replaced automatically. Data, network, secrets and WAF carry over.
 2. **Dev, staging and prod:** build once and promote the same image through separate accounts, with per-environment tfvars and state, a GitHub Environment per stage (prod trusting only `environment:prod`), tests gating staging and approval before prod.
