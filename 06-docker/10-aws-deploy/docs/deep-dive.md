@@ -28,7 +28,7 @@ cd 06-docker/09-capstone-smart-lead
 docker compose up -d --build
 
 export APP=http://localhost:8080     
-curl -i $APP/actuator/health         # expect 200, db UP
+curl -i $APP                          # expect 200, db UP
 curl -i -X POST $APP/api/v1/messages -H 'Content-Type: application/json' \
   -d '{"content":"How much does the pro plan cost?"}'   # expect 2xx
 curl $APP/api/v1/leads               # the qualified lead
